@@ -1,5 +1,6 @@
 using SimpleIterator
-using Test
+using Test, MacroTools
+import SimpleIterator: my_function
 
 # Define a type to test the iterator macro
 struct MyType
@@ -103,3 +104,21 @@ end
         @test [i for i in mt] == [1, 2, 3]
     end
 end
+
+# Test the explicit return type
+@testset "Explicit Return Type" begin
+    struct MyType5
+        data::Vector{Int}
+    end
+    
+    @iterfn function iterator(x::MyType5)::Vector{Int}
+        return x.data
+    end
+    mt = MyType5([1, 2, 3])
+    @test [i for i in mt] == [1, 2, 3]
+    @test IteratorType(MyType5) == Vector{Int}
+    @test Base.IteratorEltype(mt) == Base.HasEltype()
+    @test Base.IteratorSize(mt) == Base.HasShape{1}()
+    @test Base.eltype(mt) == Int
+end
+

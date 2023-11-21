@@ -41,7 +41,7 @@ macro iterfn(fundef)
     name = get(sig, :name, nothing)
     kwargs = get(sig, :kwargs, nothing)
     body = sig[:body]
-    rtype = get(sig, :rettype, nothing)
+    rtype = get(sig, :rtype, nothing)
 
     if name === nothing
         throw(ArgumentError("Iterator function name is required"))
@@ -63,13 +63,26 @@ macro iterfn(fundef)
     end
 
     fundef = quote
-        function iterator($(argname...)::$anno) where {$(bounds...)}
+        function SimpleIterator.iterator($(argname...)::$anno) where {$(bounds...)}
             $body
         end
     end
 
+    if rtype === nothing
+        itypedef = ()
+    else
+        rtype = esc(rtype)
+        itypedef = (quote
+            function SimpleIterator.IteratorType(::Type{$anno}) where {$(bounds...)}
+                $rtype
+            end
+        end,)
+    end
+
     rst = quote
         $fundef
+        
+        $(itypedef...)
 
         function Base.iterate(x::$anno) where {$(bounds...)}
             _iterator = iterator(x)
