@@ -3,11 +3,9 @@ uuid = "7cb8a005-ebb1-44a9-b470-e3223924bb96"
 authors = ["yhqjohn <25428156+yhqjohn@users.noreply.github.com> and contributors"]
 version = "0.0.1-DEV"
 
+[deps]
+MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
+SimpleTraits = "699a6c99-e7fa-54fc-8d76-47d257e15c1d"
+
 [compat]
-julia = "1"
-
-[extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Test"]
+julia = "1.6.2"
