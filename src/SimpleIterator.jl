@@ -2,14 +2,30 @@ module SimpleIterator
 
 using MacroTools
 
+"""
+    iterator(x)
+
+Overload this function to define the iterator for a type. The function should return a iterator.
+This function **MUST** be overloaded with the [`@iterfn`](@ref) macro.
+"""
 function iterator end
+
+"""
+    IteratorType(::Type{T})
+
+Return the iterator type of a type.
+Overload this function to define the iterator type of a type. The function should return a type.
+The default implementation is `Any`.
+Overload this function to enable iteration utilities related to the type such as `Base.length` and `Base.eltype`.
+If the [`iterator`](@ref) function is defined with return type annotation, this function will be automatically overloaded.
+"""
 IteratorType(::Any) = Any
 
 
 """
     @iterfn
 
-Define a iterator for a type. The type should have a function named `iterator` which returns a iterator.
+Define a iterator for a type. The type should have a function named [`iterator`](@ref) which returns a iterator.
 After the macro is called, iteration over the type will automatically becomes iteration over the iterator.
 
 # Arguments
