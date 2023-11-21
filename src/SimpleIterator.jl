@@ -40,6 +40,7 @@ macro iterfn(fundef)
     bounds = sig[:whereparams]
     name = get(sig, :name, nothing)
     kwargs = get(sig, :kwargs, nothing)
+    body = sig[:body]
     rtype = get(sig, :rettype, nothing)
 
     if name === nothing
@@ -50,6 +51,21 @@ macro iterfn(fundef)
 
     if kwargs != []
         throw(ArgumentError("Iterator function should not have keyword arguments"))
+    end
+
+    anno = esc(anno)
+    bounds = map(esc, bounds)
+    body = esc(body)
+    if argname === nothing
+        argname = ()
+    else
+        argname = (esc(argname),)
+    end
+
+    fundef = quote
+        function iterator($(argname...)::$anno) where {$(bounds...)}
+            $body
+        end
     end
 
     rst = quote
@@ -87,7 +103,7 @@ macro iterfn(fundef)
         Base.isdone(x::$anno) where {$(bounds...)} = Base.isdone(iterator(x))
         Base.isdone(::$anno, state) where {$(bounds...)} = Base.isdone(state...)
     end
-    return esc(rst)
+    return rst
 end
 
 export @iterfn, IteratorType, iterator
