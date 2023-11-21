@@ -1,7 +1,7 @@
 name = "SimpleIterator"
 uuid = "7cb8a005-ebb1-44a9-b470-e3223924bb96"
 authors = ["yhqjohn <25428156+yhqjohn@users.noreply.github.com> and contributors"]
-version = "0.0.1-DEV"
+version = "0.1.0"
 
 [deps]
 MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
